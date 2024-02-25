@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-gray-dark text-white;
+        @apply box-border;
+        @apply font-inter;
+    }
+
+    mark {
+        @apply font-code text-white;
+        @apply bg-gray-medium border border-gray-light;
+        @apply px-1 rounded;
+    }
+
+    pre {
+        @apply font-code;
+    }
+
+    pre {
+        @apply border-l-2 border-gray-light pl-3 text-xl;
+    }
+
+    strong {
+        @apply font-bold;
+    }
+
+    p {
+        font-weight: 300;
+        @apply text-xl;
+    }
+
+    h1 {
+        font-weight: bold;
+        @apply text-7xl;
+    }
+
+    h2 {
+        @apply text-gray-light text-3xl;
+        font-weight: 300;
+    }
+
+    h3 {
+        font-weight: bold;
+        @apply text-4xl;
+    }
+
+    h4 {
+        font-weight: 500;
+    }
+
+    h5 {
+        font-weight: bold;
+        @apply text-xl;
+    }
+
+    .menu-btn {
+        @apply hover:bg-gray-medium rounded-xl;
+    }
+
+    input {
+        @apply font-inter outline-none border-gray-light px-4;
+    }
+
+    input::placeholder {
+        @apply text-gray-light;
+    }
+
+    select {
+        @apply bg-transparent text-lg text-gray-light outline-none;
+    }
+
+    option {
+        @apply text-black;
+    }
+
+    th {
+        font-weight: 500;
+    }
+
+    td {
+        font-weight: 300;
+    }
+
+    th,
+    td {
+        font-size: large;
+        @apply h-10;
+    }
+
+    tr {
+        text-align: left;
+    }
+
+    td:first-child {
+        @apply rounded-l;
+    }
+
+    td:last-child {
+        @apply rounded-r;
+    }
+
+    tr:not(:first-of-type) {
+        cursor: pointer;
+    }
+
+    tr:hover:not(:first-of-type) {
+        @apply bg-gray-medium;
+    }
+}
