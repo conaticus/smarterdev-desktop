@@ -36,7 +36,7 @@ export default function ProblemDetails() {
 
         if (!(await fs.exists(problemPath))) {
             fs.createDir(problemPath);
-            const solutionFilePath = await join(problemPath, "index.js");
+            const solutionFilePath = await join(problemPath, "solution.js");
             const testFilePath = await join(problemPath, "test.js");
             const instructionsFilePath = await join(
                 problemPath,

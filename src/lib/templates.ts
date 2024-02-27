@@ -13,11 +13,10 @@ const TESTS_TEMPLATES_PATH = "./templates/tests";
 export default class Templater {
     public static toCamelCase(text: string) {
         return text
-            .split(" ")
-            .map((txt, idx) =>
-                idx == 0 ? txt : (txt = txt[0].toUpperCase() + txt.substring(1))
-            )
-            .join("");
+            .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
+                return index === 0 ? word.toLowerCase() : word.toUpperCase();
+            })
+            .replace(/\s+/g, "");
     }
 
     public static async templateLanguage(
@@ -29,13 +28,13 @@ export default class Templater {
         const functionName = Templater.toCamelCase(problem.title);
         const args = problem.functionArgs[language];
 
-        templates.solution = templates.solution.replace("%f", functionName);
-        templates.solution = templates.solution.replace("%a", args);
+        templates.solution = templates.solution.replaceAll("%f", functionName);
+        templates.solution = templates.solution.replaceAll("%a", args);
 
-        templates.tests.replace("%f", functionName);
+        templates.tests = templates.tests.replaceAll("%f", functionName);
 
-        const testTemplateStartIndex = templates.tests.indexOf("=");
-        const testTemplateEndIndex = templates.tests.indexOf("=");
+        const testTemplateStartIndex = templates.tests.indexOf("-");
+        const testTemplateEndIndex = templates.tests.lastIndexOf("-");
 
         const testTemplate = templates.tests.substring(
             testTemplateStartIndex + 3,
@@ -43,7 +42,7 @@ export default class Templater {
         );
 
         templates.tests =
-            templates.tests.substring(testTemplateStartIndex - 1) +
+            templates.tests.substring(0, testTemplateStartIndex - 1) +
             templates.tests.substring(testTemplateEndIndex + 1);
 
         let tests = "";
@@ -52,14 +51,14 @@ export default class Templater {
             const expectedResult = problem.testCases[callArguments];
             tests +=
                 testTemplate
-                    .replace("%ca", callArguments)
-                    .replace("%e", expectedResult)
-                    .replace("%i", String(testNumber)) + "\n\n";
+                    .replaceAll("%ca", callArguments)
+                    .replaceAll("%e", JSON.stringify(expectedResult))
+                    .replaceAll("%i", String(testNumber)) + "\n\n";
 
             testNumber++;
         }
 
-        templates.tests.replace("%t", tests);
+        templates.tests = templates.tests.replace("%t", tests);
 
         return templates;
     }
