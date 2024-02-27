@@ -1,3 +1,5 @@
+import { Language } from "./lib/templates";
+
 export enum ProblemDifficulty {
     Easy,
     Medium,
@@ -19,7 +21,7 @@ export interface Problem {
     testCases: {
         [key: string]: any;
     };
-    args: string;
+    functionArgs: Record<Language, string>;
 }
 
 const problems: Problem[] = [
@@ -41,7 +43,10 @@ const problems: Problem[] = [
             "5, 5": 10,
             "0, 0": 0,
         },
-        args: "a, b", // TODO: Multi language support
+        functionArgs: {
+            JavaScript: "a, b",
+            TypeScript: "a: number, b: number",
+        },
     },
     {
         title: "Two Sum",
@@ -66,52 +71,15 @@ const problems: Problem[] = [
             },
         ],
         constraints: [],
-        args: "nums, target",
+        functionArgs: {
+            JavaScript: "nums, target",
+            TypeScript: "nums: number[], target: number",
+        },
         testCases: {
             "[2,5,7,12], 7": [0, 1],
             "[12,6,4], 16": [0, 2],
             "[4,9,1,21,4], 8": [0, 4],
             "[2,4,5,1], 10": [],
-        },
-    },
-    {
-        title: "Reverse Integer",
-        difficulty: ProblemDifficulty.Easy,
-        description:
-            "Given a 32-bit signed integer, `x`, return `x` with its digits reversed. \\ If reversing `x` causes the value to go outside the signed 32-bit integer range, return `0`. \\ Assume the environment does not allow storing signed 64-bit integers (so only 32-bit integers are allowed, with values ranging from `-2^31` to `2^31` - 1).",
-        examples: [
-            {
-                input: "123",
-                output: "321",
-                explanation: "Reverse of 123 is 321.",
-            },
-            {
-                input: "-123",
-                output: "-321",
-                explanation: "Reverse of -123 is -321.",
-            },
-            {
-                input: "120",
-                output: "21",
-                explanation:
-                    "Reverse of 120 is 21. Note that the leading zero is dropped.",
-            },
-            {
-                input: "0",
-                output: "0",
-                explanation: "Reverse of 0 is 0.",
-            },
-        ],
-        constraints: [
-            "`-2^31 <= x <= 2^31 - 1`",
-            "The input is a 32-bit signed integer (stored in a signed 32-bit integer variable, whose range is from `-2^31` to `2^31 - 1)",
-        ],
-        args: "x",
-        testCases: {
-            "123": 321,
-            "-123": -321,
-            "120": 21,
-            "0": 0,
         },
     },
 ];

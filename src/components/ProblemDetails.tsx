@@ -8,6 +8,7 @@ import { fs } from "@tauri-apps/api";
 import { toast } from "react-toastify";
 import { join } from "@tauri-apps/api/path";
 import { Command } from "@tauri-apps/api/shell";
+import Templater, { Language } from "../lib/templates";
 
 export default function ProblemDetails() {
     const currentProblem = useInputStore((state) => state.currentProblem);
@@ -35,8 +36,8 @@ export default function ProblemDetails() {
 
         if (!(await fs.exists(problemPath))) {
             fs.createDir(problemPath);
-            const jsFilePath = await join(problemPath, "index.js");
-            const jestFilePath = await join(problemPath, "test.js");
+            const solutionFilePath = await join(problemPath, "index.js");
+            const testFilePath = await join(problemPath, "test.js");
             const instructionsFilePath = await join(
                 problemPath,
                 "instructions.md"
@@ -78,33 +79,13 @@ export default function ProblemDetails() {
                 }`
             );
 
-            await fs.writeFile(
-                jsFilePath,
-                `function solution(${problem.args}) {
-
-}
-
-module.exports = solution;`
+            const { solution, tests } = await Templater.templateLanguage(
+                currentLanguage as Language,
+                problem
             );
 
-            let jestContents = `const solution = require("./index");\n\n function test() {`;
-
-            let testNumber = 1;
-            for (const args in problem.testCases) {
-                const expected = JSON.stringify(problem.testCases[args]);
-                jestContents += `let result_${testNumber} = JSON.stringify(solution(${args}));
-if (result_${testNumber} === JSON.stringify(${expected}))
-    console.log("\\x1b[32mTest ${testNumber}: PASSED\\x1b[0m\\nInput: solution(${args})\\nExpected: ${expected}\\nGot: " + result_${testNumber} + "\\n");
-else {
-    console.error("\\x1b[31mTest ${testNumber}: FAILED\\x1b[0m\\nInput: solution(${args})\\nExpected: ${expected}\\nGot: " + result_${testNumber}); return; }
-`;
-                testNumber++;
-            }
-
-            jestContents +=
-                "console.log('\\n\\x1b[32mYou passed, congratulations!\\x1b[0m')}\ntest();";
-
-            await fs.writeFile(jestFilePath, jestContents);
+            await fs.writeFile(solutionFilePath, solution);
+            await fs.writeFile(testFilePath, tests);
         }
 
         const openVSCommand = new Command("open-code", [problemPath]);
@@ -126,7 +107,7 @@ else {
                 <Dropdown
                     choice={currentLanguage}
                     setChoice={setCurrentLanguage}
-                    options={["JavaScript"]}
+                    options={["JavaScript", "TypeScript"] as Language[]}
                 />
                 <button
                     onClick={openInCode}

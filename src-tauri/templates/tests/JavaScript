@@ -1,0 +1,19 @@
+const %f = require("./solution.js"); 
+
+===
+result = %f(%ca);
+if (JSON.stringify(result) === JSON.stringify(%e)) {
+    console.log("\\x1b[32mTest %i: PASSED\\x1b[0m\\nInput: %ca\\nExpected: %e\\nGot: " + result + "\n");
+} else {
+    console.error("\\x1b[31mTest %i: FAILED\\x1b[0m\\nInput: %ca\\nExpected: %e\\nGot: " + result);
+    return;
+}
+===
+
+function test() {
+    let result = null;
+    %t
+    console.log('\\x1b[32mYou passed, congratulations!\\x1b[0m');
+}
+
+test();
