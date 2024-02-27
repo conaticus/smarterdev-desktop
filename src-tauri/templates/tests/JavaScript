@@ -3,9 +3,9 @@ const %f = require("./solution.js");
 ---
 result = %f(%ca);
 if (JSON.stringify(result) === JSON.stringify(%e)) {
-    console.log("\x1b[32mTest %i: PASSED\x1b[0m\nInput: %ca\nExpected: %e\nGot: " + result + "\n");
+    console.log("\x1b[32mTest %i: PASSED\x1b[0m\nInput: %ca\nExpected: %e\nGot: " + JSON.stringify(result) + "\n");
 } else {
-    console.error("\x1b[31mTest %i: FAILED\x1b[0m\nInput: %ca\nExpected: %e\nGot: " + result);
+    console.error("\x1b[31mTest %i: FAILED\x1b[0m\nInput: %ca\nExpected: %e\nGot: " + JSON.stringify(result));
     return;
 }
 ---
